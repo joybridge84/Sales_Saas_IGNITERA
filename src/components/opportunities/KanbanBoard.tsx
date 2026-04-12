@@ -46,6 +46,7 @@ const STAGES: Stage[] = [
   'NEGOTIATION',
   'WON',
   'LOST',
+  'ON_HOLD',
 ];
 
 const STAGE_NAMES: Record<Stage, string> = {
@@ -57,6 +58,7 @@ const STAGE_NAMES: Record<Stage, string> = {
   NEGOTIATION: 'クロージング',
   WON: '成約',
   LOST: '失注',
+  ON_HOLD: '保留',
 };
 
 export function KanbanBoard({ initialOpportunities }: KanbanBoardProps) {
