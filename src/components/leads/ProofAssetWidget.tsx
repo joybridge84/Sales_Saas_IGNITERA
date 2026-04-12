@@ -13,7 +13,7 @@ export function ProofAssetWidget({ leadId, assets }: { leadId: string, assets: a
       <div className="flex justify-between items-center">
         <h3 className="text-xl font-black text-gray-900 tracking-tight flex items-center gap-2">
             <FileText size={20} className="text-purple-600" />
-            Proof Assets
+            エビデンス資料
         </h3>
         <button 
             onClick={() => setShowForm(!showForm)}
@@ -33,17 +33,17 @@ export function ProofAssetWidget({ leadId, assets }: { leadId: string, assets: a
         >
             <input type="hidden" name="leadId" value={leadId} />
             <div className="grid grid-cols-2 gap-2">
-                <input name="title" placeholder="Asset Title" required className="col-span-2 text-xs p-2 rounded-lg border-none font-bold" />
+                <input name="title" placeholder="資料タイトル" required className="col-span-2 text-xs p-2 rounded-lg border-none font-bold" />
                 <select name="assetType" className="text-xs p-2 rounded-lg border-none font-bold">
-                    <option value="PROPOSAL">Proposal PDF</option>
-                    <option value="LP_PERFORMANCE">LP Metric</option>
-                    <option value="SPEED_REPORT">Speed Report</option>
+                    <option value="PROPOSAL">提案資料 (PDF)</option>
+                    <option value="LP_PERFORMANCE">分析・実績数値</option>
+                    <option value="SPEED_REPORT">スピードレポート</option>
                 </select>
-                <input name="url" placeholder="URL/Link" className="text-xs p-2 rounded-lg border-none font-bold" />
+                <input name="url" placeholder="URLパス" className="text-xs p-2 rounded-lg border-none font-bold" />
             </div>
-            <input name="impactMetric" placeholder="Impact (e.g. CVR +2.1%)" className="text-xs p-2 w-full rounded-lg border-none font-bold" />
+            <input name="impactMetric" placeholder="効果 (例: CVR +2.1%)" className="text-xs p-2 w-full rounded-lg border-none font-bold" />
             <button type="submit" className="w-full bg-purple-600 text-white py-2 rounded-xl text-xs font-black shadow-lg shadow-purple-200">
-                SAVE ASSET
+                資料を保存
             </button>
         </form>
       )}
@@ -66,14 +66,14 @@ export function ProofAssetWidget({ leadId, assets }: { leadId: string, assets: a
                 </div>
                 {asset.impactMetric && (
                     <div className="text-[10px] font-black text-purple-600 bg-purple-50 px-2 py-0.5 rounded-full w-fit">
-                        IMPACT: {asset.impactMetric}
+                        インパクト: {asset.impactMetric}
                     </div>
                 )}
             </div>
         ))}
         {assets.length === 0 && !showForm && (
             <div className="text-center py-8 opacity-40 italic text-xs font-bold font-mono">
-                No tactical assets linked yet.
+                関連資料はまだありません。
             </div>
         )}
       </div>

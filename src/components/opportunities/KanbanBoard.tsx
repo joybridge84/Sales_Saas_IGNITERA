@@ -48,6 +48,17 @@ const STAGES: Stage[] = [
   'LOST',
 ];
 
+const STAGE_NAMES: Record<Stage, string> = {
+  PROSPECTING: 'アプローチ中',
+  DISCOVERY: 'ヒアリング',
+  QUALIFIED: '有効商談',
+  PROPOSAL: '提案中',
+  QUOTE_SENT: '見積提示済み',
+  NEGOTIATION: 'クロージング',
+  WON: '成約',
+  LOST: '失注',
+};
+
 export function KanbanBoard({ initialOpportunities }: KanbanBoardProps) {
   const [opportunities, setOpportunities] = useState(initialOpportunities);
   const [activeId, setActiveId] = useState<string | null>(null);
@@ -103,7 +114,7 @@ export function KanbanBoard({ initialOpportunities }: KanbanBoardProps) {
           <KanbanColumn
             key={stage}
             id={stage}
-            title={stage}
+            title={STAGE_NAMES[stage]}
             count={opportunities.filter((o) => o.stage === stage).length}
           >
             <SortableContext

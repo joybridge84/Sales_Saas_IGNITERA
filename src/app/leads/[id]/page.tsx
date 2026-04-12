@@ -38,9 +38,9 @@ export default async function LeadDetailPage({ params }: { params: { id: string 
             </div>
             <div>
               <nav className="flex items-center gap-2 text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">
-                <Link href="/leads" className="hover:text-blue-600 transition">Leads</Link>
+                <Link href="/leads" className="hover:text-blue-600 transition">顧客一覧</Link>
                 <span>/</span>
-                <span className="text-gray-900">Lead Profile</span>
+                <span className="text-gray-900">顧客詳細</span>
               </nav>
               <h1 className="text-4xl font-black text-gray-900 tracking-tight leading-none mb-3">
                 {lead.companyName}
@@ -59,7 +59,7 @@ export default async function LeadDetailPage({ params }: { params: { id: string 
           <div className="flex flex-col items-end gap-3 self-center md:self-start">
             <div className={`px-5 py-2 rounded-2xl text-xs font-black uppercase tracking-widest shadow-sm ring-1 ring-inset
               ${isConverted ? 'bg-blue-50 text-blue-700 ring-blue-700/10' : 'bg-green-50 text-green-700 ring-green-700/10'}`}>
-              {lead.status}
+              {lead.status === 'NEW' ? '新規' : lead.status === 'CONVERTED' ? '商談化済み' : lead.status}
             </div>
             <div className="flex items-center gap-2 text-sm text-gray-500 font-bold">
                 <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center text-[10px] text-blue-700">
@@ -80,9 +80,9 @@ export default async function LeadDetailPage({ params }: { params: { id: string 
             <div className="bg-white rounded-3xl p-8 border-2 border-dashed border-green-500 shadow-2xl shadow-green-100 bg-gradient-to-br from-white to-green-50/30 overflow-hidden relative group">
                <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6 uppercase tracking-tight">
                   <div className="flex-1">
-                    <h2 className="text-2xl font-black text-green-800 mb-2">Ready for Stage-Up?</h2>
+                    <h2 className="text-2xl font-black text-green-800 mb-2">ステージアップの準備はいいですか？</h2>
                     <p className="text-green-700 font-bold text-sm leading-relaxed max-w-md opacity-80">
-                      Convert this lead into an active Opportunity and Account to begin the proposal process.
+                      このリードを有効な商談およびアカウントに変換し、提案プロセスを開始します。
                     </p>
                   </div>
                   <form action={convertLead}>
@@ -91,7 +91,7 @@ export default async function LeadDetailPage({ params }: { params: { id: string 
                     <input type="hidden" name="ownerUserId" value={lead.ownerUserId} />
                     <button type="submit" className="bg-green-600 text-white px-10 py-5 rounded-2xl font-black shadow-xl shadow-green-200 hover:bg-green-700 transition-all hover:scale-[1.05] active:scale-95 flex items-center gap-3 whitespace-nowrap">
                       <CheckCircle2 size={24} />
-                      CONVERT NOW
+                      商談化する
                     </button>
                   </form>
                </div>
@@ -103,13 +103,13 @@ export default async function LeadDetailPage({ params }: { params: { id: string 
             <div className="bg-gray-900 text-white rounded-3xl p-10 shadow-2xl flex flex-col md:flex-row items-center justify-between gap-6 border border-gray-800">
                 <div className="space-y-2">
                     <div className="flex items-center gap-2 text-blue-400 font-black text-xs uppercase tracking-widest">
-                        <CheckCircle2 size={16} /> Lead Converted Successfully
+                        <CheckCircle2 size={16} /> 商談化に成功しました
                     </div>
-                    <h2 className="text-3xl font-black tracking-tighter">This lead is now a Partnership</h2>
-                    <p className="text-gray-400 font-bold max-w-sm">All historical data has been synchronized with the new Opportunity record.</p>
+                    <h2 className="text-3xl font-black tracking-tighter">このリードは現在パートナーシップ段階です</h2>
+                    <p className="text-gray-400 font-bold max-w-sm">すべての履歴データは新しい商談レコードに同期されました。</p>
                 </div>
                 <Link href="/opportunities" className="bg-blue-600 text-white px-8 py-4 rounded-2xl font-black hover:bg-blue-700 transition shadow-xl shadow-blue-500/20 whitespace-nowrap">
-                    Go to Pipeline →
+                    パイプラインへ移動 →
                 </Link>
             </div>
           )}
@@ -125,13 +125,13 @@ export default async function LeadDetailPage({ params }: { params: { id: string 
                <div className="flex items-center justify-between mb-8">
                     <h3 className="text-xl font-black text-gray-900 flex items-center gap-3 lowercase tracking-tighter italic">
                        <History size={24} className="text-gray-300 not-italic" /> 
-                       Activity_Timeline
+                       活動タイムライン
                     </h3>
                     <div className="h-px flex-1 mx-6 bg-gray-50" />
                </div>
                
                <div className="space-y-10 relative before:absolute before:inset-y-0 before:left-[19px] before:w-[2px] before:bg-gradient-to-b before:from-blue-100 before:via-gray-100 before:to-transparent">
-                  {lead.activities.map((act) => (
+                  {lead.activities.map((act: any) => (
                      <div key={act.id} className="relative pl-14 group">
                         <div className="absolute left-1.5 top-1 w-8 h-8 bg-white border-2 border-blue-500 rounded-full z-10 flex items-center justify-center shadow-sm group-hover:scale-110 transition-transform">
                           <div className="w-2.5 h-2.5 bg-blue-500 rounded-full" />
@@ -164,14 +164,14 @@ export default async function LeadDetailPage({ params }: { params: { id: string 
               <div className="flex justify-between items-center mb-6">
                 <h3 className="text-xl font-black text-gray-900 tracking-tight flex items-center gap-2">
                     <ListTodo size={20} className="text-blue-600" />
-                    Tasks
+                    タスク
                 </h3>
                 <span className="bg-blue-600 text-white text-[10px] px-2 py-1 rounded-full font-black min-w-[24px] text-center shadow-lg shadow-blue-100">
-                    {lead.tasks.filter(t => t.status !== 'DONE').length}
+                    {lead.tasks.filter((t: any) => t.status !== 'DONE').length}
                 </span>
               </div>
               <div className="space-y-4">
-                {lead.tasks.map(task => (
+                {lead.tasks.map((task: any) => (
                    <TaskItem key={task.id} task={task} />
                 ))}
                 <QuickTaskForm leadId={lead.id} creatorId={lead.ownerUserId} />
@@ -185,7 +185,7 @@ export default async function LeadDetailPage({ params }: { params: { id: string 
            <div className="bg-white rounded-3xl p-8 border border-gray-100 shadow-sm">
                 <h3 className="text-sm font-black text-gray-400 uppercase tracking-widest mb-6 flex items-center gap-2">
                     <Target size={18} className="text-blue-600" />
-                    Strategic Rank
+                    戦略ランク
                 </h3>
                 <div className="flex items-center justify-center relative mb-6">
                     <svg className="w-32 h-32 transform -rotate-90">
@@ -194,12 +194,12 @@ export default async function LeadDetailPage({ params }: { params: { id: string 
                     </svg>
                     <div className="absolute inset-0 flex flex-col items-center justify-center">
                         <span className="text-3xl font-black text-gray-900 leading-none">{lead.fitScore}%</span>
-                        <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest mt-1 italic">Fit Score</span>
+                        <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest mt-1 italic">確信度</span>
                     </div>
                 </div>
                 <div className="bg-gray-50 p-4 rounded-2xl border border-gray-100">
                     <div className="flex items-center gap-2 text-orange-600 font-black text-[10px] uppercase tracking-widest mb-2 italic">
-                        <AlertCircle size={14} /> Pain Point Hypothesis
+                        <AlertCircle size={14} /> 課題仮説 (Pain Points)
                     </div>
                     <p className="text-gray-600 text-sm font-bold leading-relaxed italic">
                         "{lead.painHypothesis || 'No pain hypothesis found.'}"
@@ -209,7 +209,7 @@ export default async function LeadDetailPage({ params }: { params: { id: string 
 
            {/* Info Widget */}
            <div className="bg-gray-900 text-white rounded-3xl p-8 shadow-xl">
-              <h3 className="text-xs font-black text-blue-400 uppercase tracking-widest mb-6">Connect Info</h3>
+              <h3 className="text-xs font-black text-blue-400 uppercase tracking-widest mb-6">連絡先情報</h3>
               <div className="space-y-5">
                  <div className="flex items-start gap-4 p-4 bg-gray-800/50 rounded-2xl border border-gray-800 group hover:border-blue-500/30 transition-colors">
                     <div className="w-10 h-10 bg-gray-800 rounded-xl flex items-center justify-center text-blue-400 shadow-inner"><Mail size={20} /></div>

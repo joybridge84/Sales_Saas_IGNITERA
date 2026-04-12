@@ -36,7 +36,7 @@ export function AISupportWidget({ leadId }: { leadId: string }) {
         <div className="flex justify-between items-center mb-6">
             <h3 className="text-xl font-black flex items-center gap-2 tracking-tight">
                 <Sparkles size={24} className="text-yellow-400" />
-                AI Sales Assistant
+                AI営業アシスタント
             </h3>
             {suggestion && (
                 <button 
@@ -52,14 +52,14 @@ export function AISupportWidget({ leadId }: { leadId: string }) {
         {!suggestion ? (
             <div className="text-center py-6 space-y-4">
                 <p className="text-indigo-100 font-bold text-sm leading-relaxed max-w-sm mx-auto">
-                    Analyze activity history & assets to build a context-aware follow-up draft.
+                    活動履歴とエビデンス資料を解析し、最適なフォローアップメールを下書きします。
                 </p>
                 <button 
                     onClick={handleGenerate}
                     disabled={isGenerating}
                     className="bg-white text-indigo-600 px-8 py-4 rounded-2xl font-black shadow-xl hover:scale-105 active:scale-95 transition-all flex items-center gap-2 mx-auto disabled:opacity-50"
                 >
-                    {isGenerating ? 'Analyzing Context...' : 'Generate AI Draft'}
+                    {isGenerating ? 'コンテキストを解析中...' : 'AIメール下書き生成'}
                     <Wand2 size={20} />
                 </button>
             </div>
@@ -78,11 +78,11 @@ export function AISupportWidget({ leadId }: { leadId: string }) {
                 </div>
                 <div className="flex justify-between items-center px-2">
                     <span className="text-[10px] font-black text-indigo-200 uppercase tracking-widest">
-                        Model: IGNITERA-Sales-Brain-v1
+                        生成モデル: IGNITERA-Brain-v1
                     </span>
                     {copied && (
                         <span className="text-xs font-black text-green-300 animate-pulse">
-                            Copied to clipboard!
+                            クリップボードにコピーしました！
                         </span>
                     )}
                 </div>

@@ -29,7 +29,7 @@ export function TaskItem({ task }: { task: any }) {
           {task.title}
         </div>
         <div className="text-[10px] text-gray-400 font-bold uppercase tracking-wider mt-1">
-          Due {task.dueAt ? new Date(task.dueAt).toLocaleDateString() : 'No date'}
+          期日: {task.dueAt ? new Date(task.dueAt).toLocaleDateString() : '未設定'}
         </div>
       </div>
     </div>

@@ -23,42 +23,42 @@ export default async function DashboardPage() {
   return (
     <div className="p-8 space-y-8">
       <div>
-        <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Executive Dashboard</h1>
-        <p className="text-gray-500 mt-1">Real-time overview of IGNITERA sales pipeline.</p>
+        <h1 className="text-3xl font-bold text-gray-900 tracking-tight">経営ダッシュボード</h1>
+        <p className="text-gray-500 mt-1">IGNITERA 営業パイプラインのリアルタイム概要</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
-        <SummaryCard title="New Leads" value={newLeadsCount} subtitle="Immediate action" color="blue" />
-        <SummaryCard title="Won Deals" value={wonCount} subtitle="This month" color="green" />
-        <SummaryCard title="Won Revenue" value={`¥${(Number(wonAmount._sum.amount) || 0).toLocaleString()}`} subtitle="Invoiced total" color="purple" />
-        <SummaryCard title="Overdue Tasks" value={overdueTasks} subtitle="SLA breaches" color="orange" />
-        <SummaryCard title="Daily Logic" value={activitiesToday} subtitle="Activities today" color="indigo" />
+        <SummaryCard title="新規リード" value={newLeadsCount} subtitle="即時対応が必要" color="blue" />
+        <SummaryCard title="成約数" value={wonCount} subtitle="今月の実績" color="green" />
+        <SummaryCard title="成約額" value={`¥${(Number(wonAmount._sum.amount) || 0).toLocaleString()}`} subtitle="累計請求ベース" color="purple" />
+        <SummaryCard title="期限切れタスク" value={overdueTasks} subtitle="SLA超過" color="orange" />
+        <SummaryCard title="本日の活動" value={activitiesToday} subtitle="デイリーログ数" color="indigo" />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <div className="bg-white p-8 rounded-3xl shadow-sm border border-gray-100">
           <div className="flex justify-between items-center mb-6">
-            <h2 className="text-xl font-black text-gray-900 tracking-tight">Stage Conversion Rate</h2>
+            <h2 className="text-xl font-black text-gray-900 tracking-tight">フェーズ別成約率</h2>
             <div className="text-[10px] font-black text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full uppercase tracking-widest">
-                Target: 15%
+                目標: 15%
             </div>
           </div>
           <div className="space-y-4">
-             <BarChartRow label="Lead -> Qualified" value={28.5} color="bg-blue-500" />
-             <BarChartRow label="Qualified -> Proposal" value={42.1} color="bg-indigo-500" />
-             <BarChartRow label="Proposal -> Won" value={18.2} color="bg-green-500" />
+             <BarChartRow label="リード -> 有効商談" value={28.5} color="bg-blue-500" />
+             <BarChartRow label="有効商談 -> 提案済み" value={42.1} color="bg-indigo-500" />
+             <BarChartRow label="提案済み -> 成約" value={18.2} color="bg-green-500" />
           </div>
         </div>
         <div className="bg-white p-8 rounded-3xl shadow-sm border border-gray-100">
-            <h2 className="text-xl font-black text-gray-900 tracking-tight mb-6 text-center">Pipeline Velocity</h2>
+            <h2 className="text-xl font-black text-gray-900 tracking-tight mb-6 text-center">パイプライン速度</h2>
             <div className="h-48 flex items-end justify-between px-4 pb-2 border-b border-gray-100 mb-2 gap-4">
-                <VelocityBar height="40%" label="Mon" />
-                <VelocityBar height="65%" label="Tue" />
-                <VelocityBar height="30%" label="Wed" />
-                <VelocityBar height="85%" label="Thu" active />
-                <VelocityBar height="0%" label="Fri" />
+                <VelocityBar height="40%" label="月" />
+                <VelocityBar height="65%" label="火" />
+                <VelocityBar height="30%" label="水" />
+                <VelocityBar height="85%" label="木" active />
+                <VelocityBar height="0%" label="金" />
             </div>
-            <p className="text-center text-[10px] font-bold text-gray-400 uppercase tracking-widest">Growth Index: +12%</p>
+            <p className="text-center text-[10px] font-bold text-gray-400 uppercase tracking-widest">成長指数: +12%</p>
         </div>
       </div>
     </div>

@@ -25,7 +25,7 @@ export function QuickTaskForm({ leadId, creatorId }: { leadId: string, creatorId
                 type="text" 
                 name="title" 
                 required 
-                placeholder="Next action..."
+                placeholder="次のアクションを入力..."
                 className="flex-1 bg-transparent border-none text-xs font-bold outline-none placeholder:text-gray-300"
             />
             <button 
