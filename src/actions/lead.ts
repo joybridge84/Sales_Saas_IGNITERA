@@ -2,6 +2,7 @@
 
 import { PrismaClient, LeadStatus } from '@prisma/client';
 import { revalidatePath } from 'next/cache';
+import { redirect } from 'next/navigation';
 
 const prisma = new PrismaClient();
 
@@ -46,5 +47,5 @@ export async function deleteLead(id: string) {
 
   revalidatePath('/leads');
   revalidatePath('/');
-  return { success: true };
+  redirect('/leads');
 }
