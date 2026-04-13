@@ -4,10 +4,13 @@ import { generateAISuggestion } from "@/actions/ai_support";
 import { useState } from "react";
 import { Sparkles, Copy, Check, RefreshCw, Wand2 } from "lucide-react";
 
+import { Toast } from "@/components/ui/Toast";
+
 export function AISupportWidget({ leadId }: { leadId: string }) {
   const [suggestion, setSuggestion] = useState<string | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [toast, setToast] = useState<{ message: string, type: 'success' | 'error' } | null>(null);
 
   const handleGenerate = async () => {
     setIsGenerating(true);
@@ -15,8 +18,10 @@ export function AISupportWidget({ leadId }: { leadId: string }) {
     try {
         const result = await generateAISuggestion(leadId);
         setSuggestion(result.suggestion);
+        setToast({ message: 'AIメールドラフトを生成しました', type: 'success' });
     } catch (e) {
         console.error(e);
+        setToast({ message: 'AI生成に失敗しました。もう一度お試しください。', type: 'error' });
     } finally {
         setIsGenerating(false);
     }
@@ -31,7 +36,8 @@ export function AISupportWidget({ leadId }: { leadId: string }) {
   };
 
   return (
-    <div className="bg-gradient-to-br from-indigo-600 to-blue-700 rounded-3xl p-8 text-white shadow-2xl relative overflow-hidden group">
+    <div className="bg-gradient-to-br from-indigo-600 to-blue-700 rounded-[2.5rem] p-10 text-white shadow-2xl relative overflow-hidden group border border-white/5">
+      {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
       <div className="relative z-10">
         <div className="flex justify-between items-center mb-6">
             <h3 className="text-xl font-black flex items-center gap-2 tracking-tight">

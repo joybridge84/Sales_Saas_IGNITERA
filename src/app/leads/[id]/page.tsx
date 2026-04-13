@@ -1,7 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 import { convertLead } from '@/actions/convert';
-import { notFound } from 'next/navigation';
-import { Building2, Mail, Phone, Target, CheckCircle2, AlertCircle, MessageSquare, ListTodo, History } from 'lucide-react';
+import { redirect } from 'next/navigation';
+import { Building2, Mail, Phone, Target, CheckCircle2, AlertCircle, MessageSquare, ListTodo, History, ArrowLeft, ChevronRight } from 'lucide-react';
 import { TaskItem } from '@/components/leads/TaskItem';
 import { ActivityForm } from '@/components/leads/ActivityForm';
 import { QuickTaskForm } from '@/components/leads/QuickTaskForm';
@@ -13,17 +13,24 @@ const prisma = new PrismaClient();
 
 export default async function LeadDetailPage({ params }: { params: { id: string } }) {
   const { id } = await params;
-  const lead = await prisma.lead.findUnique({
-    where: { id },
-    include: { 
-        owner: true, 
-        activities: { orderBy: { happenedAt: 'desc' } }, 
-        tasks: { orderBy: { dueAt: 'asc' } },
-        proofAssets: { orderBy: { createdAt: 'desc' } }
-    }
-  });
+  
+  let lead;
+  try {
+    lead = await prisma.lead.findUnique({
+      where: { id },
+      include: { 
+          owner: true, 
+          activities: { orderBy: { happenedAt: 'desc' } }, 
+          tasks: { orderBy: { dueAt: 'asc' } },
+          proofAssets: { orderBy: { createdAt: 'desc' } }
+      }
+    });
+  } catch (e) {
+    console.error("Error fetching lead:", e);
+    return redirect('/leads');
+  }
 
-  if (!lead) return notFound();
+  if (!lead) return redirect('/leads');
 
   const isConverted = lead.status === 'CONVERTED';
 
@@ -31,41 +38,50 @@ export default async function LeadDetailPage({ params }: { params: { id: string 
     <div className="bg-gray-50 min-h-screen pb-20">
       {/* Header Section */}
       <div className="bg-white border-b border-gray-100 px-8 py-10">
-        <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-start gap-6">
-          <div className="flex gap-6 items-center text-left">
-            <div className="w-20 h-20 bg-gradient-to-br from-blue-600 to-indigo-700 text-white rounded-3xl flex items-center justify-center font-black text-3xl shadow-xl shadow-blue-100 ring-8 ring-blue-50">
-              {lead.companyName.charAt(0)}
+        <div className="max-w-6xl mx-auto">
+          <Link href="/leads" className="inline-flex items-center gap-2 text-sm font-bold text-blue-600 hover:text-blue-700 transition-all mb-8 group">
+            <div className="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center group-hover:-translate-x-1 transition-transform">
+              <ArrowLeft size={16} />
             </div>
-            <div>
-              <nav className="flex items-center gap-2 text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">
-                <Link href="/leads" className="hover:text-blue-600 transition">顧客一覧</Link>
-                <span>/</span>
-                <span className="text-gray-900">顧客詳細</span>
-              </nav>
-              <h1 className="text-4xl font-black text-gray-900 tracking-tight leading-none mb-3">
-                {lead.companyName}
-              </h1>
-              <div className="flex flex-wrap items-center gap-4 text-gray-500 font-bold text-sm">
-                 <span className="flex items-center gap-2 bg-gray-50 px-3 py-1 rounded-full border border-gray-100">
-                    <Building2 size={16} className="text-gray-400" /> {lead.industry || 'Multi-sector'}
-                 </span>
-                 <span className="flex items-center gap-2 bg-gray-50 px-3 py-1 rounded-full border border-gray-100">
-                    <Target size={16} className="text-gray-400" /> Source: {lead.source}
-                 </span>
+            顧客一覧に戻る
+          </Link>
+          
+          <div className="flex flex-col md:flex-row justify-between items-start gap-6">
+            <div className="flex gap-8 items-center text-left">
+              <div className="w-24 h-24 bg-gradient-to-br from-blue-600 to-indigo-700 text-white rounded-[2rem] flex items-center justify-center font-black text-4xl shadow-2xl shadow-blue-100 ring-8 ring-blue-50 shrink-0">
+                {lead.companyName.charAt(0)}
+              </div>
+              <div>
+                <nav className="flex items-center gap-2 text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-3">
+                  <Link href="/leads" className="hover:text-blue-600 transition">CLIENTS</Link>
+                  <ChevronRight size={10} className="text-gray-300" />
+                  <span className="text-gray-900">DETAIL</span>
+                </nav>
+                <h1 className="text-5xl font-black text-gray-900 tracking-tighter leading-none mb-4">
+                  {lead.companyName}
+                </h1>
+                <div className="flex flex-wrap items-center gap-4 text-gray-500 font-bold text-sm">
+                   <span className="flex items-center gap-2 bg-gray-50 px-4 py-2 rounded-xl border border-gray-100 italic">
+                      <Building2 size={16} className="text-blue-500" /> {lead.industry || 'Multi-sector'}
+                   </span>
+                   <span className="flex items-center gap-2 bg-gray-50 px-4 py-2 rounded-xl border border-gray-100 italic">
+                      <Target size={16} className="text-orange-500" /> Source: {lead.source}
+                   </span>
+                </div>
               </div>
             </div>
-          </div>
-          
-          <div className="flex flex-col items-end gap-3 self-center md:self-start">
-            <div className={`px-5 py-2 rounded-2xl text-xs font-black uppercase tracking-widest shadow-sm ring-1 ring-inset
-              ${isConverted ? 'bg-blue-50 text-blue-700 ring-blue-700/10' : 'bg-green-50 text-green-700 ring-green-700/10'}`}>
-              {lead.status === 'NEW' ? '新規' : lead.status === 'CONVERTED' ? '商談化済み' : lead.status}
-            </div>
-            <div className="flex items-center gap-2 text-sm text-gray-500 font-bold">
-                <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center text-[10px] text-blue-700">
-                    {lead.owner?.name?.charAt(0)}
-                </div>
-                {lead.owner?.name || 'Unassigned'}
+            
+            <div className="flex flex-col items-end gap-4 self-center md:self-start">
+              <div className={`px-6 py-2.5 rounded-full text-[10px] font-black uppercase tracking-[0.2em] shadow-sm ring-1 ring-inset
+                ${isConverted ? 'bg-blue-50 text-blue-700 ring-blue-700/20' : 'bg-green-50 text-green-700 ring-green-700/20'}`}>
+                {lead.status === 'NEW' ? '新規リード' : lead.status === 'CONVERTED' ? '商談化済み' : lead.status}
+              </div>
+              <div className="flex items-center gap-2 text-sm text-gray-600 font-black italic bg-white px-4 py-2 rounded-xl shadow-sm border border-gray-50">
+                  <div className="w-8 h-8 bg-gradient-to-tr from-blue-100 to-indigo-100 rounded-full flex items-center justify-center text-xs text-blue-700 font-black shadow-inner">
+                      {lead.owner?.name?.charAt(0)}
+                  </div>
+                  {lead.owner?.name || 'Unassigned'}
+              </div>
             </div>
           </div>
         </div>

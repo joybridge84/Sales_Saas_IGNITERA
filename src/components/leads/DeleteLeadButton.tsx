@@ -1,36 +1,41 @@
 'use client';
 
-import { Trash2 } from 'lucide-react';
+import { Trash2, Loader2 } from 'lucide-react';
 import { deleteLead } from '@/actions/lead';
 import { useState } from 'react';
+import { Toast } from '@/components/ui/Toast';
 
 export function DeleteLeadButton({ id }: { id: string }) {
   const [isDeleting, setIsDeleting] = useState(false);
+  const [toast, setToast] = useState<{ message: string, type: 'success' | 'error' } | null>(null);
 
   async function handleDelete(e: React.MouseEvent) {
     e.preventDefault();
     e.stopPropagation();
 
-    if (window.confirm('この顧客データを本当に削除しますか？関連する活動履歴も削除される可能性があります。')) {
+    if (window.confirm('この顧客データを本当に削除しますか？')) {
       setIsDeleting(true);
       try {
         await deleteLead(id);
       } catch (err) {
         console.error(err);
-        alert('削除に失敗しました。');
+        setToast({ message: '削除に失敗しました。もう一度お試しください。', type: 'error' });
         setIsDeleting(false);
       }
     }
   }
 
   return (
-    <button 
-      onClick={handleDelete}
-      disabled={isDeleting}
-      className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors disabled:opacity-50"
-      title="削除"
-    >
-      <Trash2 size={18} />
-    </button>
+    <>
+      {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
+      <button 
+        onClick={handleDelete}
+        disabled={isDeleting}
+        className="w-10 h-10 flex items-center justify-center text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-xl transition-all duration-300 disabled:opacity-50 group/del"
+        title="削除"
+      >
+        {isDeleting ? <Loader2 size={18} className="animate-spin text-red-600" /> : <Trash2 size={18} className="group-hover/del:scale-110 transition-transform" />}
+      </button>
+    </>
   );
 }

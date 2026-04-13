@@ -31,15 +31,25 @@ export function KanbanItem({ opp, isOverlay }: KanbanItemProps) {
       style={style}
       {...attributes}
       {...listeners}
-      className={`bg-white p-4 rounded-xl shadow-sm border border-gray-200 cursor-grab active:cursor-grabbing hover:border-blue-300 transition-colors ${isOverlay ? 'shadow-2xl ring-2 ring-blue-500 ring-offset-2' : ''}`}
+      className={`bg-white p-6 rounded-3xl shadow-sm border border-gray-100 cursor-grab active:cursor-grabbing hover:border-blue-400 hover:shadow-xl hover:shadow-blue-500/5 transition-all duration-300 group/item ${isOverlay ? 'shadow-2xl ring-4 ring-blue-500/10 scale-105' : ''}`}
     >
-      <div className="font-bold text-gray-900 text-sm mb-1 leading-snug">{opp.title}</div>
-      <div className="text-xs text-gray-400 font-medium mb-3">{opp.account.displayName}</div>
-      <div className="flex justify-between items-center">
-        <div className="text-sm font-bold text-blue-600">
-          ¥{(Number(opp.amount) || 0).toLocaleString()}
+      <div className="font-black text-gray-900 text-base mb-1 leading-tight group-hover/item:text-blue-600 transition-colors tracking-tighter italic">{opp.title}</div>
+      <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-4 flex items-center gap-2">
+        <div className="w-1 h-1 bg-gray-300 rounded-full" />
+        {opp.account.displayName}
+      </div>
+      <div className="flex justify-between items-end">
+        <div className="space-y-1">
+            <div className="text-[8px] font-black text-gray-300 uppercase tracking-widest">ESTIMATED AMOUNT</div>
+            <div className="text-lg font-black text-gray-900 tracking-tighter leading-none">
+              ¥{(Number(opp.amount) || 0).toLocaleString()}
+            </div>
         </div>
-        <div className="text-[10px] font-bold bg-blue-50 text-blue-600 px-1.5 py-0.5 rounded border border-blue-100">
+        <div className={`text-[10px] font-black px-2 py-1 rounded-lg border flex flex-col items-center
+            ${opp.probability > 70 ? 'bg-green-50 text-green-600 border-green-100' : 
+              opp.probability > 30 ? 'bg-blue-50 text-blue-600 border-blue-100' : 
+              'bg-gray-50 text-gray-400 border-gray-100'}`}>
+          <span className="text-[8px] opacity-50">PROB</span>
           {opp.probability}%
         </div>
       </div>

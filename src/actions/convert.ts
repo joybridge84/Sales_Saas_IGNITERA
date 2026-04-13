@@ -63,5 +63,5 @@ export async function convertLead(formData: FormData) {
 
   revalidatePath('/leads');
   revalidatePath('/opportunities');
-  redirect(`/opportunities/${result.id}`);
+  redirect('/opportunities');
 }
