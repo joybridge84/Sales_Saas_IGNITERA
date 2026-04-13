@@ -35,3 +35,16 @@ export async function createLead(formData: FormData) {
   revalidatePath('/leads');
   return { success: true };
 }
+
+export async function deleteLead(id: string) {
+  // Related data like activities and tasks have FK with cascade or should be handled.
+  // In the schema, tasks and activities don't have explicit cascade in prisma but usually DB handles it.
+  // To be safe, we can delete them or rely on schema.
+  await prisma.lead.delete({
+    where: { id }
+  });
+
+  revalidatePath('/leads');
+  revalidatePath('/');
+  return { success: true };
+}
