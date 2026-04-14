@@ -16,10 +16,19 @@ export function DeleteLeadButton({ id }: { id: string }) {
     if (window.confirm('この顧客データを本当に削除しますか？')) {
       setIsDeleting(true);
       try {
-        await deleteLead(id);
+        const result = await deleteLead(id);
+        if (result && !result.success) {
+          setToast({ message: result.error || '削除に失敗しました。', type: 'error' });
+          setIsDeleting(false);
+        } else {
+          // Success is handled by revalidatePath in the action
+          // If we want a toast for success, we can add it here, 
+          // but usually revalidatePath will refresh the list.
+          setToast({ message: '顧客データを削除しました。', type: 'success' });
+        }
       } catch (err) {
         console.error(err);
-        setToast({ message: '削除に失敗しました。もう一度お試しください。', type: 'error' });
+        setToast({ message: '予期せぬエラーが発生しました。', type: 'error' });
         setIsDeleting(false);
       }
     }

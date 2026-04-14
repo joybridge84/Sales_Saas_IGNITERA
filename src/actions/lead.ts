@@ -38,14 +38,19 @@ export async function createLead(formData: FormData) {
 }
 
 export async function deleteLead(id: string) {
-  // Related data like activities and tasks have FK with cascade or should be handled.
-  // In the schema, tasks and activities don't have explicit cascade in prisma but usually DB handles it.
-  // To be safe, we can delete them or rely on schema.
-  await prisma.lead.delete({
-    where: { id }
-  });
-
-  revalidatePath('/leads');
-  revalidatePath('/');
-  redirect('/leads');
+  try {
+    await prisma.lead.delete({
+      where: { id }
+    });
+    
+    revalidatePath('/leads');
+    revalidatePath('/');
+    return { success: true };
+  } catch (error: any) {
+    console.error('Lead delete error:', error.message || error);
+    return { 
+      success: false, 
+      error: error.message || '削除に失敗しました' 
+    };
+  }
 }

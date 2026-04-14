@@ -133,6 +133,7 @@ model Lead {
   tasks               Task[]
   activities          Activity[]
   proofAssets         ProofAsset[]
+  opportunities       Opportunity[]
 
   @@map("leads")
 }
@@ -217,6 +218,7 @@ model Opportunity {
   account           Account         @relation(fields: [accountId], references: [id])
   primaryContact    Contact?        @relation("PrimaryContact", fields: [primaryContactId], references: [id])
   owner             User            @relation("OpportunityOwner", fields: [ownerUserId], references: [id])
+  lead              Lead?           @relation(fields: [sourceLeadId], references: [id], onDelete: Cascade)
   activities        Activity[]
   tasks             Task[]
   quotes            Quote[]
@@ -240,8 +242,8 @@ model Activity {
   createdByUserId   String       @map("created_by_user_id") @db.Uuid
   createdAt         DateTime     @default(now()) @map("created_at") @db.Timestamptz
 
-  opportunity       Opportunity? @relation(fields: [opportunityId], references: [id])
-  lead              Lead?        @relation(fields: [leadId], references: [id])
+  opportunity       Opportunity? @relation(fields: [opportunityId], references: [id], onDelete: Cascade)
+  lead              Lead?        @relation(fields: [leadId], references: [id], onDelete: Cascade)
   account           Account?     @relation(fields: [accountId], references: [id])
   contact           Contact?     @relation(fields: [contactId], references: [id])
   creator           User         @relation("ActivityCreator", fields: [createdByUserId], references: [id])
@@ -265,8 +267,8 @@ model Task {
   updatedAt       DateTime   @default(now()) @updatedAt @map("updated_at") @db.Timestamptz
   completedAt     DateTime?  @map("completed_at") @db.Timestamptz
 
-  lead            Lead?        @relation(fields: [leadId], references: [id])
-  opportunity     Opportunity? @relation(fields: [opportunityId], references: [id])
+  lead            Lead?        @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  opportunity     Opportunity? @relation(fields: [opportunityId], references: [id], onDelete: Cascade)
   account         Account?     @relation(fields: [accountId], references: [id])
   assignee        User         @relation("TaskAssignee", fields: [assignedUserId], references: [id])
   creator         User         @relation("TaskCreator", fields: [createdByUserId], references: [id])
@@ -307,7 +309,7 @@ model Quote {
   createdAt       DateTime @default(now()) @map("created_at") @db.Timestamptz
   updatedAt       DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz
 
-  opportunity     Opportunity @relation(fields: [opportunityId], references: [id])
+  opportunity     Opportunity @relation(fields: [opportunityId], references: [id], onDelete: Cascade)
   creator         User        @relation("QuoteCreator", fields: [createdByUserId], references: [id])
 
   @@map("quotes")
@@ -328,7 +330,7 @@ model Handoff {
   createdAt           DateTime @default(now()) @map("created_at") @db.Timestamptz
   updatedAt           DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz
 
-  opportunity         Opportunity @relation(fields: [opportunityId], references: [id])
+  opportunity         Opportunity @relation(fields: [opportunityId], references: [id], onDelete: Cascade)
   internalOwner       User?       @relation("HandoffInternalOwner", fields: [internalOwnerUserId], references: [id])
   creator             User        @relation("HandoffCreator", fields: [createdByUserId], references: [id])
 
@@ -349,7 +351,7 @@ model ProofAsset {
   createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz
   updatedAt    DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz
 
-  lead          Lead?        @relation(fields: [leadId], references: [id])
+  lead          Lead?        @relation(fields: [leadId], references: [id], onDelete: Cascade)
   opportunities OpportunityProofAsset[]
 
   @@map("proof_assets")
@@ -359,7 +361,7 @@ model OpportunityProofAsset {
   opportunityId String @map("opportunity_id") @db.Uuid
   proofAssetId  String @map("proof_asset_id") @db.Uuid
 
-  opportunity   Opportunity @relation(fields: [opportunityId], references: [id])
+  opportunity   Opportunity @relation(fields: [opportunityId], references: [id], onDelete: Cascade)
   proofAsset    ProofAsset  @relation(fields: [proofAssetId], references: [id])
 
   @@id([opportunityId, proofAssetId])
